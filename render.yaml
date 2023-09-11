@@ -3,7 +3,7 @@ services:
     build:
       context: .
     ports:
-      - 5000:5555
+      - 80:5555
     environment:
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_USER=${MYSQL_USER}
