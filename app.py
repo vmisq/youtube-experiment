@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import jsonify
 from youtubecrowler import main
 
 app = Flask(__name__)
@@ -7,6 +8,10 @@ app = Flask(__name__)
 def execute_crowler():
     main()
     return '200'
+
+@app.route('/health')
+def health_check():
+    return jsonify(status='ok', message='Application is healthy'), 200
 
 if __name__ == '__main__':
     app.run(port=5555)
