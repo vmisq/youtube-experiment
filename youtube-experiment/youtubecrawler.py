@@ -11,6 +11,7 @@ MYSQL_HOST = os.environ['MYSQL_HOST']
 MYSQL_USER = os.environ['MYSQL_USER']
 MYSQL_PASSWORD = os.environ['MYSQL_PASSWORD']
 MYSQL_DATABASE = os.environ['MYSQL_DATABASE']
+FUNCTION_REGION = os.environ.get('FUNCTION_REGION', '')
 
 WEB_PAGE_URL = 'https://youtube.com'
 
@@ -98,7 +99,7 @@ def main():
         url=WEB_PAGE_URL,
         html_content=webpage,
         ip_address_of_request=my_ip,
-        country_of_request=my_country,
+        country_of_request=my_country + '-' + FUNCTION_REGION,
         timestamp_of_request=timestamp
     )
 

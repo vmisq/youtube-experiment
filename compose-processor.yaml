@@ -1,16 +1,13 @@
 services:
-  web:
+  processor:
     build:
       context: .
-    ports:
-      - 5000:5555
     environment:
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_TABLE=webpagecrawler
+      - MYSQL_TABLE=webpagecrowler
       - BATCH_SIZE=20
       - TIME_OUT=18
-    command: ["gunicorn", "app:app", "--bind", "0.0.0.0:5555"]
-    restart: unless-stopped
+    command: ["python", "processor.py"]

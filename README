@@ -1,0 +1,7 @@
+# Objective
+Evaluate different youtube frontpages across the world.
+
+# Structure
+- Crowler deployed in many regions
+- Orchestrator to execute the crowlers on command
+- Processor to get data from those pages

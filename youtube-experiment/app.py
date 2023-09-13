@@ -1,11 +1,11 @@
 from flask import Flask
 from flask import jsonify
-from youtubecrowler import main
+from youtubecrawler import main
 
 app = Flask(__name__)
 
 @app.route('/')
-def execute_crowler():
+def execute_crawler():
     main()
     return '200'
 
