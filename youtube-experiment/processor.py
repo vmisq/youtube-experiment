@@ -179,7 +179,7 @@ def main():
         logger.error(MYSQL_TABLE + ' - ' + str(e))
         logger.info('Try again in 30 seconds')
         time.sleep(30)
-        BATCH_SIZE = max(BATCH_SIZE/2, 5)
+        BATCH_SIZE = str(max(int(BATCH_SIZE)/2, 5))
         return None
     
     if number_of_webpages < 1:
