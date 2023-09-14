@@ -45,15 +45,27 @@ def get_webpages():
         )
     
     cursor = connection.cursor()
-    cursor.execute("SET @@session.wait_timeout = 60")
     query = f"""
-        SELECT id, html_content
+        SELECT id
         FROM {MYSQL_TABLE} s
         WHERE NOT EXISTS (
             SELECT * FROM processed_webpage pw WHERE pw.source_id = s.id AND pw.source_table = '{MYSQL_TABLE}'
         )
         LIMIT {BATCH_SIZE}
     """
+    logger.info(query)
+    cursor.execute(query)
+
+    ids = []
+    results = cursor.fetchall()
+    for result in results:
+        ids.append(result)
+    
+    query = f"""
+        SELECT id, html_content 
+        FROM webpagecrawler_gcp WHERE id IN ({','.join([str(id) for id in ids])})
+    """
+
     logger.info(query)
     cursor.execute(query)
 
