@@ -63,8 +63,7 @@ def get_webpages():
         res.append(result)
 
     cursor.close()
-    cursor.close()
-
+    connection.close()
     return res
 
 def get_yt_suggestions_from_soup(soup):

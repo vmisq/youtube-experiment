@@ -12,5 +12,6 @@ services:
       - MYSQL_TABLE=webpagecrawler
       - BATCH_SIZE=20
       - TIME_OUT=18
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
     command: ["gunicorn", "app:app", "--bind", "0.0.0.0:5555"]
     restart: unless-stopped
