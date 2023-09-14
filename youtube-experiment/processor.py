@@ -179,7 +179,7 @@ def main():
         logger.info(f'Successfully pulled {number_of_webpages} webpages')
     except Exception as e:
         logger.error('Error on getting content from database')
-        logger.error(str(e))
+        logger.error(MYSQL_TABLE + ' - ' + str(e))
         logger.info('Try again in 30 seconds')
         time.sleep(30)
         return None
@@ -202,16 +202,17 @@ def main():
             logger.info('Info uploaded to db')
         except Exception as e:
             logger.error(f'Error in source_id {source_id}')
-            logger.error(str(e))
+            logger.error(MYSQL_TABLE + ' - ' + str(e))
             try:
                 mark_for_manual_retry(source_id, str(e))
             except Exception as e:
                 logger.error('Could no mark for retry')
-                logger.error(str(e))
+                logger.error(MYSQL_TABLE + ' - ' + str(e))
 
 
 if __name__=='__main__':
     start = datetime.now()
     while (datetime.now() - start).seconds <= int(TIME_OUT):
         main()
+    logger.info(MYSQL_TABLE + ' - TIME OUT')
     raise Exception('TIME OUT')
