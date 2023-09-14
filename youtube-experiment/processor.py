@@ -54,6 +54,7 @@ def get_webpages():
         )
         LIMIT {BATCH_SIZE}
     """
+    logger.info(query)
     cursor.execute(query)
 
     res = []
