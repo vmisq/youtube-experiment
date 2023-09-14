@@ -84,7 +84,7 @@ def find_videos(yt_suggestions):
             yield ('No Shelf', 'video', yt_suggestion['richItemRenderer']['content']['videoRenderer'])
         except KeyError:
             try:
-                if list(yt_suggestion['richSectionRenderer']['content'].keys())[0]=='counterfactualRenderer':
+                if list(yt_suggestion['richSectionRenderer']['content'].keys())[0] in ['counterfactualRenderer', 'primetimePromoRenderer']:
                     continue
                 yt_suggestion_shelf = yt_suggestion['richSectionRenderer']['content']['richShelfRenderer']
                 yt_suggestion_shelf_type = yt_suggestion_shelf['title']['runs'][0]['text']
