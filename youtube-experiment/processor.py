@@ -148,7 +148,7 @@ def save_data(source_id, videos_info):
         for each_video in videos_info:
             video_id, channel_id, video_shelf, video_type, video_gross_position, video_info = each_video      
             cursor.execute(insert_query, (source_id, MYSQL_TABLE, video_id, channel_id, video_shelf, video_type, video_gross_position, video_info))
-            connection.commit()
+        connection.commit()
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
