@@ -45,7 +45,7 @@ def get_webpages():
         )
     
     cursor = connection.cursor()
-
+    cursor.execute("SET SESSION MAX_EXECUTION_TIME=60000")
     query = f"""
         SELECT id, html_content
         FROM {MYSQL_TABLE} s
