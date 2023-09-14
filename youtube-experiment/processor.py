@@ -63,7 +63,7 @@ def get_webpages():
     
     query = f"""
         SELECT id, html_content 
-        FROM webpagecrawler_gcp WHERE id IN ({','.join([str(id) for id in ids])})
+        FROM webpagecrawler_gcp WHERE id IN ({','.join([str(id[0]) for id in ids])})
     """
 
     logger.info(query)
