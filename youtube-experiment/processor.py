@@ -45,7 +45,7 @@ def get_webpages():
         )
     
     cursor = connection.cursor()
-    cursor.execute("SET SESSION MAX_EXECUTION_TIME=60000")
+    cursor.execute("SET @@session.wait_timeout = 60")
     query = f"""
         SELECT id, html_content
         FROM {MYSQL_TABLE} s
@@ -179,7 +179,6 @@ def main():
         logger.error(MYSQL_TABLE + ' - ' + str(e))
         logger.info('Try again in 30 seconds')
         time.sleep(30)
-        BATCH_SIZE = str(max(int(BATCH_SIZE)/2, 5))
         return None
     
     if number_of_webpages < 1:
