@@ -174,16 +174,16 @@ def main():
     try:
         webpages = get_webpages()
         number_of_webpages = len(webpages)
-        logger.info(f'Successfully pulled {number_of_webpages} webpages')
     except Exception as e:
         logger.error('Error on getting content from database')
         logger.error(MYSQL_TABLE + ' - ' + str(e))
         logger.info('Try again in 30 seconds')
         time.sleep(30)
         return None
-    finally:
-        if number_of_webpages < 1:
-            raise Exception('No more webpages to process')
+    
+    if number_of_webpages < 1:
+        raise Exception('No more webpages to process')
+    logger.info(f'Successfully pulled {number_of_webpages} webpages')
     
     for source_id, webpage in webpages:
         try:
