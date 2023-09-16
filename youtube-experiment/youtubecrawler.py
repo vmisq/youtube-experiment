@@ -7,10 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MYSQL_HOST = os.environ['MYSQL_HOST']
-MYSQL_USER = os.environ['MYSQL_USER']
-MYSQL_PASSWORD = os.environ['MYSQL_PASSWORD']
-MYSQL_DATABASE = os.environ['MYSQL_DATABASE']
+MYSQL_HOST = os.environ.get('MYSQL_HOST','')
+MYSQL_USER = os.environ.get('MYSQL_USER','')
+MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', '')
+MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE', '')
 FUNCTION_REGION = os.environ.get('FUNCTION_REGION', '')
 
 WEB_PAGE_URL = 'https://youtube.com'
@@ -102,6 +102,7 @@ def main():
         country_of_request=my_country + '-' + FUNCTION_REGION,
         timestamp_of_request=timestamp
     )
+    return '200'
 
 if __name__=='__main__':
     main()

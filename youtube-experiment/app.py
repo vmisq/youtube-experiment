@@ -1,13 +1,18 @@
 from flask import Flask
 from flask import jsonify
 from youtubecrawler import main
+from youtubeproxy import main
 
 app = Flask(__name__)
 
 @app.route('/')
 def execute_crawler():
-    main()
-    return '200'
+    return main()
+
+
+@app.route('/proxyonly')
+def execute_crawler():
+    return main()
 
 @app.route('/health')
 def health_check():
