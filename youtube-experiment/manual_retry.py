@@ -11,7 +11,6 @@ MYSQL_HOST = os.environ['MYSQL_HOST']
 MYSQL_USER = os.environ['MYSQL_USER']
 MYSQL_PASSWORD = os.environ['MYSQL_PASSWORD']
 MYSQL_DATABASE = os.environ['MYSQL_DATABASE']
-MYSQL_TABLE = os.environ['MYSQL_TABLE']
 RETRY_IDS = os.environ.get('RETRY_IDS', 'ALL')
 
 def get_webpages():
@@ -26,8 +25,8 @@ def get_webpages():
 
     query = f"""
         SELECT id, html_content
-        FROM {MYSQL_TABLE}
-        {f"WHERE id IN (SELECT source_id FROM need_manual_retry WHERE fixed='N' AND source_table = '{MYSQL_TABLE}')"
+        FROM webpagecrawler
+        {f"WHERE id IN (SELECT source_id FROM need_manual_retry WHERE fixed='N')"
          if RETRY_IDS=='ALL' else
          'WHERE id IN ({RETRY_IDS})'}
     """
@@ -57,7 +56,7 @@ def update_manual_retry(source_id):
         update_query = f"""
             UPDATE need_manual_retry
             SET fixed='Y'
-            WHERE source_id={source_id} AND source_table='{MYSQL_TABLE}'
+            WHERE source_id={source_id}
         """
 
         cursor.execute(update_query)
@@ -96,7 +95,7 @@ def main():
             update_manual_retry(source_id)
         except Exception as e:
             print(e)
-            print(f'Failed retry on {MYSQL_TABLE} for id {source_id}')
+            print(f'Failed retry on webpagecrawler for id {source_id}')
 
 
 if __name__=='__main__':

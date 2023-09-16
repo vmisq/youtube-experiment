@@ -30,7 +30,6 @@ MYSQL_HOST = os.environ['MYSQL_HOST']
 MYSQL_USER = os.environ['MYSQL_USER']
 MYSQL_PASSWORD = os.environ['MYSQL_PASSWORD']
 MYSQL_DATABASE = os.environ['MYSQL_DATABASE']
-MYSQL_TABLE = os.environ['MYSQL_TABLE']
 BATCH_SIZE = os.environ['BATCH_SIZE']
 TIME_OUT = os.environ['TIME_OUT']
 
@@ -47,9 +46,9 @@ def get_webpages():
     cursor = connection.cursor()
     query = f"""
         SELECT id
-        FROM {MYSQL_TABLE} s
+        FROM webpagecrawler s
         WHERE NOT EXISTS (
-            SELECT * FROM processed_webpage pw WHERE pw.source_id = s.id AND pw.source_table = '{MYSQL_TABLE}'
+            SELECT * FROM processed_webpage pw WHERE pw.source_id = s.id
         )
         LIMIT {BATCH_SIZE}
     """
@@ -63,7 +62,7 @@ def get_webpages():
     
     query = f"""
         SELECT id, html_content 
-        FROM webpagecrawler_gcp WHERE id IN ({','.join([str(id[0]) for id in ids])})
+        FROM webpagecrawler WHERE id IN ({','.join([str(id[0]) for id in ids])})
     """
 
     logger.info(query)
@@ -141,13 +140,13 @@ def save_data(source_id, videos_info):
         cursor = connection.cursor()
 
         insert_query = """
-            INSERT INTO processed_webpage (source_id, source_table, video_id, channel_id, video_shelf, video_type, video_gross_position, video_info)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO processed_webpage (source_id, video_id, channel_id, video_shelf, video_type, video_gross_position, video_info)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
         
         for each_video in videos_info:
             video_id, channel_id, video_shelf, video_type, video_gross_position, video_info = each_video      
-            cursor.execute(insert_query, (source_id, MYSQL_TABLE, video_id, channel_id, video_shelf, video_type, video_gross_position, video_info))
+            cursor.execute(insert_query, (source_id, video_id, channel_id, video_shelf, video_type, video_gross_position, video_info))
         connection.commit()
 
     except mysql.connector.Error as err:
@@ -168,11 +167,11 @@ def mark_for_manual_retry(source_id, error_msg):
         cursor = connection.cursor()
 
         insert_query = """
-            INSERT INTO need_manual_retry (source_id, source_table, error_msg)
-            VALUES (%s, %s, %s)
+            INSERT INTO need_manual_retry (source_id, error_msg)
+            VALUES (%s, %s)
         """
             
-        cursor.execute(insert_query, (source_id, MYSQL_TABLE, error_msg))
+        cursor.execute(insert_query, (source_id, error_msg))
         connection.commit()
 
     except mysql.connector.Error as err:
@@ -188,7 +187,7 @@ def main():
         number_of_webpages = len(webpages)
     except Exception as e:
         logger.error('Error on getting content from database')
-        logger.error(MYSQL_TABLE + ' - ' + str(e))
+        logger.error(str(e))
         logger.info('Try again in 30 seconds')
         time.sleep(30)
         return None
@@ -215,17 +214,17 @@ def main():
             logger.info('Info uploaded to db')
         except Exception as e:
             logger.error(f'Error in source_id {source_id}')
-            logger.error(MYSQL_TABLE + ' - ' + str(e))
+            logger.error(str(e))
             try:
                 mark_for_manual_retry(source_id, str(e))
             except Exception as e:
                 logger.error('Could no mark for retry')
-                logger.error(MYSQL_TABLE + ' - ' + str(e))
+                logger.error(str(e))
 
 
 if __name__=='__main__':
     start = datetime.now()
     while (datetime.now() - start).seconds <= int(TIME_OUT):
         main()
-    logger.info(MYSQL_TABLE + ' - TIME OUT')
+    logger.info('TIME OUT')
     raise Exception('TIME OUT')
