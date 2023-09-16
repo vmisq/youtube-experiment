@@ -59,6 +59,9 @@ def get_webpages():
     results = cursor.fetchall()
     for result in results:
         ids.append(result)
+
+    if len(ids)==0:
+        return []
     
     query = f"""
         SELECT id, html_content 
