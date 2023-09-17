@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-import mysql.connector
 import os
 from dotenv import load_dotenv
 
@@ -66,6 +65,7 @@ def get_webpage(url: str = WEB_PAGE_URL):
         return 'Failed to get webpage', timestamp
 
 def save_to_mysql(url, html_content, ip_address_of_request, country_of_request, timestamp_of_request):
+    import mysql.connector
     try:
         connection = mysql.connector.connect(
             host=MYSQL_HOST,

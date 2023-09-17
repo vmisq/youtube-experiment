@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 from datetime import datetime
+import mysql.connector
 import time
 import json
-import mysql.connector
 import os
 from dotenv import load_dotenv
 import logging

@@ -9,5 +9,4 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - PORT=5555
     command: ["gunicorn", "app:app", "--bind", "0.0.0.0:5555"]
