@@ -101,7 +101,10 @@ def find_videos(yt_suggestions):
                 if list(yt_suggestion['richSectionRenderer']['content'].keys())[0] in ['counterfactualRenderer', 'primetimePromoRenderer', 'statementBannerRenderer']:
                     continue
                 yt_suggestion_shelf = yt_suggestion['richSectionRenderer']['content']['richShelfRenderer']
-                yt_suggestion_shelf_type = yt_suggestion_shelf['title']['runs'][0]['text']
+                try:
+                    yt_suggestion_shelf_type = yt_suggestion_shelf['title']['runs'][0]['text']
+                except KeyError:
+                    yt_suggestion_shelf_type = ''
                 for yt_suggestion_in_shelf in yt_suggestion_shelf['contents']:
                     try:
                         yield (yt_suggestion_shelf_type, 'video', yt_suggestion_in_shelf['richItemRenderer']['content']['videoRenderer'])
